@@ -5,7 +5,7 @@ Send Type Tx's
 ## Usage
 
 - Step 1: Edit `sender-cfg.json` (change type to either 1/2/3/4)
-- Step 2: `go run main.go`
+- Step 2: `go run cmd/main.go`
 
 ## Configuration
 
@@ -22,4 +22,25 @@ Send Type Tx's
   "waitForReceipt": false,
   "Type": 1
 }
+```
+
+## Test Precomiles
+
+Install solc abigen from geth
+
+```bash
+make solc-install
+make abigen-install
+```
+
+Run abigen to generate bindings
+
+```bash
+make abigen
+```
+
+Run precompile test
+
+```bash
+make precompile
 ```

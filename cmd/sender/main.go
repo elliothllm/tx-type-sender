@@ -4,30 +4,19 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
+	"math/big"
+	"os"
+	"time"
+
+	"github.com/elliothllm/tx-type-sender/cmd"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/holiman/uint256"
-	"log"
-	"math/big"
-	"os"
-	"time"
 )
-
-type Config struct {
-	RpcURL                string `json:"rpcURL"`
-	FromPrivateKey        string `json:"fromPrivateKey"`
-	ToAddress             string `json:"toAddress"`
-	SendValue             uint64 `json:"sendValue"`
-	GasPrice              uint64 `json:"gasPrice"`
-	GasLimit              uint64 `json:"gasLimit"`
-	TxAmount              int    `json:"txAmount"`
-	TxSendIntervalSeconds int    `json:"txSendIntervalSeconds"`
-	WaitForReceipt        bool   `json:"waitForReceipt"`
-	Type                  int    `json:"type"`
-}
 
 func main() {
 	ctx := context.Background()
@@ -39,7 +28,7 @@ func main() {
 	}
 	defer file.Close()
 
-	var cfg *Config
+	var cfg *cmd.Config
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(&cfg); err != nil {
 		fmt.Println("Error decoding JSON:", err)
@@ -56,7 +45,7 @@ func main() {
 	}
 }
 
-func sendTxs(ctx context.Context, cfg *Config) {
+func sendTxs(ctx context.Context, cfg *cmd.Config) {
 
 	client, err := ethclient.Dial(cfg.RpcURL)
 	if err != nil {
